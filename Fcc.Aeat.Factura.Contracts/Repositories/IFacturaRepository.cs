@@ -10,7 +10,7 @@ namespace Fcc.Aeat.Factura.Contracts.Repositories
     public interface IFacturaRepository
     {
         Task<FacturaModel> Add(FacturaRequest factura);
-        Task Update(int id, FacturaRequest factura);
-        Task Delete(string nif);
+        Task<FacturaModel> Update(int id, FacturaRequest factura);
+        Task<Boolean> Delete(int id);
     }
 }

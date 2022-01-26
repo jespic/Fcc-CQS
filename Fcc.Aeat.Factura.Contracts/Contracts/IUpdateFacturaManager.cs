@@ -9,6 +9,6 @@ namespace Fcc.Aeat.Factura.Contracts.Contracts
 {
     public interface IUpdateFacturaManager
     {
-        Task UpdateFactura(int id, FacturaRequest facturaRequest);
+        Task<FacturaResponse> UpdateFactura(int id, FacturaRequest facturaRequest);
     }
 }

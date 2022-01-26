@@ -70,16 +70,11 @@ namespace Fcc.Aeat.Api.Models
             };
         }
 
-        public static FacturaDeleteCommand MapToFacturaDeleteCommand(string nif) //transactions
+        public static FacturaDeleteCommand MapToFacturaDeleteCommand(int id) //transactions
         {
-            if (nif == null)
-            {
-                throw new ArgumentNullException(nameof(nif));
-            }
-
             return new FacturaDeleteCommand
             {
-                Nif = nif,
+                Id = id
             };
         }
     }

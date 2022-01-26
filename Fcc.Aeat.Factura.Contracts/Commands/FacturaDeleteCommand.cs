@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Fcc.Aeat.Factura.Contracts.Commands
 {
-    public class FacturaDeleteCommand : IRequest
+    public class FacturaDeleteCommand : IRequest<Boolean>
     {
-        public string Nif { get; set; }
+        public int Id { get; set; }
     }
 }

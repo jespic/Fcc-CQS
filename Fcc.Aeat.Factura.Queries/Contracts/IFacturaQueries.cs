@@ -8,6 +8,6 @@ namespace Fcc.Aeat.Factura.Queries.Contracts
 {
     public interface IFacturaQueries
     {
-        Task<IEnumerable<Factura.Contracts.Models.FacturaModel>> GetAll(string nif);
+        Task<Factura.Contracts.Models.FacturaModel> GetById(int id);
     }
 }

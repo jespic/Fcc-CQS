@@ -22,6 +22,9 @@ namespace Fcc.Aeat.Factura.Repositories
 
         public async Task<FacturaModel> Add(FacturaRequest factura)
         {
+            if(factura == null)
+                throw new ArgumentNullException(nameof(factura));
+
             using(var conn = new SqlConnection(_connectionString.Value))
             {
                 const string query =
@@ -38,11 +41,11 @@ namespace Fcc.Aeat.Factura.Repositories
                         Fecha = factura.Fecha
                     });
 
-                return await GetFacturaById(insertedId, conn);
+                return await GetById(insertedId, conn);
             }
         }
 
-        private async Task<FacturaModel> GetFacturaById(int id, SqlConnection conn)
+        private async Task<FacturaModel> GetById(int id, SqlConnection conn)
         {
             string query = $"SELECT * FROM Factura WHERE Id = {id}";
 
@@ -52,13 +55,12 @@ namespace Fcc.Aeat.Factura.Repositories
             foreach(FacturaModel facturaModel in Facturas)
             {
                 factura = facturaModel;
-
             }
             return factura;
 
         }
 
-        public async Task Update(int id, FacturaRequest factura)
+        public async Task<FacturaModel> Update(int id, FacturaRequest factura)
         {
             using (var conn = new SqlConnection(_connectionString.Value))
             {
@@ -75,17 +77,21 @@ namespace Fcc.Aeat.Factura.Repositories
                         Iva = factura.Iva,
                         Fecha = factura.Fecha
                     });
+
+                return await GetById(id, conn);
             }
         }
 
-        public async Task Delete(string nif)
+        public async Task<Boolean> Delete(int id)
         {
             using (var conn = new SqlConnection(_connectionString.Value))
             {
                 var queryParameters = new DynamicParameters();
-                queryParameters.Add("@Nif", nif);
+                queryParameters.Add("@Id", id);
 
-                await conn.ExecuteAsync("DELETE FROM Factura WHERE Nif = @Nif", queryParameters);
+                var affectedRows = await conn.ExecuteAsync("DELETE FROM Factura WHERE Id = @Id", queryParameters);
+
+                return affectedRows > 0;
             }
 
             

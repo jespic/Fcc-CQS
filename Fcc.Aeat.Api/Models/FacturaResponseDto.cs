@@ -13,7 +13,7 @@ namespace Fcc.Aeat.Api.Models
         public byte Iva { get; set; }
         public string Fecha { get; set; }
 
-        public static FacturaResponseDto MapFromFacturaResponse(FacturaResponse facturaResponse)
+        /*public static FacturaResponseDto MapFromFacturaResponse(FacturaResponse facturaResponse)
         {
             if (facturaResponse == null)
                 throw new ArgumentNullException(nameof(facturaResponse));
@@ -29,6 +29,6 @@ namespace Fcc.Aeat.Api.Models
                 Fecha = facturaResponse.Fecha
 
             };
-        }
+        }*/
     }
 }

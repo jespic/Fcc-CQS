@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Fcc.Aeat.Factura.Handlers
 {
-    public class FacturaDeleteCommandHandler : IRequestHandler<FacturaDeleteCommand>
+    public class FacturaDeleteCommandHandler : IRequestHandler<FacturaDeleteCommand, Boolean>
     {
         private readonly IDeleteFacturaManager _iDeleteFacturaManager;
 
@@ -18,12 +18,12 @@ namespace Fcc.Aeat.Factura.Handlers
         {
             _iDeleteFacturaManager = iDeleteFacturaManager;
         }
-        public async Task<Unit> Handle(FacturaDeleteCommand request, CancellationToken cancellationToken)
+        public async Task<Boolean> Handle(FacturaDeleteCommand request, CancellationToken cancellationToken)
         {
-            string nif = request.Nif;
-            await _iDeleteFacturaManager.DeleteFactura(nif);
+            int id = request.Id;
+            var deleted = await _iDeleteFacturaManager.DeleteFactura(id);
 
-            return Unit.Value; //valor informativo. Vacio
+            return deleted; 
         }
     }
 }

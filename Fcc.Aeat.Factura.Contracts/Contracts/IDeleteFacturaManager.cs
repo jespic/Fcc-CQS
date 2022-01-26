@@ -9,6 +9,6 @@ namespace Fcc.Aeat.Factura.Contracts.Contracts
 {
     public interface IDeleteFacturaManager
     {
-        Task DeleteFactura(string nif);
+        Task<Boolean> DeleteFactura(int id);
     }
 }

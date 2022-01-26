@@ -19,14 +19,9 @@ namespace Fcc.Aeat.Factura.Managers
         }
 
         //Validations should be synchronous
-        public Task DeleteFactura(string nif)
+        public Task<Boolean> DeleteFactura(int id)
         {
-            if (nif == null)
-            {
-                throw new ArgumentNullException(nameof(nif));
-            }
-
-            return _facturaRepository.Delete(nif);
+            return _facturaRepository.Delete(id);
         }
     }
 }

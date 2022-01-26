@@ -1,4 +1,5 @@
-﻿using Fcc.Aeat.Factura.Contracts.Commands;
+﻿using AutoMapper;
+using Fcc.Aeat.Factura.Contracts.Commands;
 using Fcc.Aeat.Factura.Contracts.Contracts;
 using Fcc.Aeat.Factura.Contracts.Models;
 using MediatR;
@@ -11,28 +12,22 @@ using System.Threading.Tasks;
 
 namespace Fcc.Aeat.Factura.Handlers
 {
-    public class FacturaUpdateCommandHandler : IRequestHandler<FacturaUpdateCommand>
+    public class FacturaUpdateCommandHandler : IRequestHandler<FacturaUpdateCommand, FacturaResponse>
     {
         private readonly IUpdateFacturaManager _iUpdateFacturaManager;
+        private readonly IMapper _mapper;
 
-        public FacturaUpdateCommandHandler(IUpdateFacturaManager iUpdateFacturaManager)
+        public FacturaUpdateCommandHandler(IUpdateFacturaManager iUpdateFacturaManager, IMapper mapper)
         {
             _iUpdateFacturaManager = iUpdateFacturaManager;
+            _mapper = mapper;
         }
-        public async Task<Unit> Handle(FacturaUpdateCommand request, CancellationToken cancellationToken)
+        public async Task<FacturaResponse> Handle(FacturaUpdateCommand request, CancellationToken cancellationToken)
         {
-            var facturaRequest = new FacturaRequest
-            {
-                Base = request.Base,
-                Fecha = request.Fecha,
-                Iva = request.Iva,
-                Nif = request.Nif,
-                Pais = request.Pais,
-                Importe = request.Importe
-            };
-            await _iUpdateFacturaManager.UpdateFactura(request.Id, facturaRequest);
+            var facturaRequest = _mapper.Map<FacturaRequest>(request);
+            var facturaResponse = await _iUpdateFacturaManager.UpdateFactura(request.Id, facturaRequest);
 
-            return Unit.Value; //valor informativo. Vacio
+            return facturaResponse; 
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Fcc.Aeat.Api.Models;
+using Fcc.Aeat.Factura.Contracts.Commands;
 using Fcc.Aeat.Factura.Contracts.Models;
 using Fcc.Aeat.Factura.Queries.Contracts;
 using MediatR;
@@ -27,12 +28,12 @@ namespace Fcc.Aeat.Api.Controllers
 
         // GET: api/<FacturaController>
         [HttpGet]
-        public async Task<IActionResult> Get(string nif)
+        public async Task<IActionResult> Get(int id)
         {
             try
             {
-                var facturas = await _facturaQueries.GetAll(nif);
-                    return Ok(_mapper.Map<FacturaResponse>(facturas));
+                var factura = await _facturaQueries.GetById(id);
+                    return Ok(_mapper.Map<FacturaResponse>(factura));
             }
             catch(System.Exception ex)
             {
@@ -59,20 +60,21 @@ namespace Fcc.Aeat.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] FacturaRequestDto facturaRequestDto)
         {
-            var facturaUpdateCommand = FacturaRequestDto.MapToFacturaUpdateCommand(id, facturaRequestDto);
-            await _mediator.Send(facturaUpdateCommand);
+            var facturaUpdateCommand = _mapper.Map<FacturaUpdateCommand>(facturaRequestDto);
+            facturaUpdateCommand.Id = id;
+            var facturaResponse = await _mediator.Send(facturaUpdateCommand);
 
-            return Ok();
+            return Ok(_mapper.Map<FacturaResponseDto>(facturaResponse));
         }
 
         // DELETE api/<FacturaController>/5
-        [HttpDelete("{nif}")]
-        public async Task<IActionResult> Delete(string nif)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            var facturaDeleteCommand = FacturaRequestDto.MapToFacturaDeleteCommand(nif);
-            await _mediator.Send(facturaDeleteCommand);
+            var facturaDeleteCommand = FacturaRequestDto.MapToFacturaDeleteCommand(id);
+            var deleted = await _mediator.Send(facturaDeleteCommand);
 
-            return Ok();
+            return Ok(deleted);
         }
     }
 }

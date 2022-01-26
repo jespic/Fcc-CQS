@@ -1,4 +1,5 @@
-﻿using Fcc.Aeat.Factura.Contracts.Contracts;
+﻿using AutoMapper;
+using Fcc.Aeat.Factura.Contracts.Contracts;
 using Fcc.Aeat.Factura.Contracts.Models;
 using Fcc.Aeat.Factura.Contracts.Repositories;
 using System;
@@ -12,20 +13,22 @@ namespace Fcc.Aeat.Factura.Managers
     public class UpdateFacturaManager : IUpdateFacturaManager
     {
         private readonly IFacturaRepository _facturaRepository;
+        private readonly IMapper _mapper;
 
-        public UpdateFacturaManager(IFacturaRepository facturaRepository)
+        public UpdateFacturaManager(IFacturaRepository facturaRepository, IMapper mapper)
         {
             _facturaRepository = facturaRepository;
-        }
+            _mapper = mapper;
+         }
 
-        public Task UpdateFactura(int id, FacturaRequest facturaRequest)
+        public async Task<FacturaResponse> UpdateFactura(int id, FacturaRequest facturaRequest)
         {
             if (facturaRequest == null)
-            {
                 throw new ArgumentNullException(nameof(facturaRequest));
-            }
+            
 
-            return _facturaRepository.Update(id, facturaRequest);
+            var facturaModel = await _facturaRepository.Update(id, facturaRequest);
+            return _mapper.Map<FacturaResponse>(facturaModel);
         }
     }
 }

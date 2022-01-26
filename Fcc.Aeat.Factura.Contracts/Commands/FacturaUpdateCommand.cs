@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Fcc.Aeat.Factura.Contracts.Models;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Fcc.Aeat.Factura.Contracts.Commands
 {
-    public class FacturaUpdateCommand : IRequest
+    public class FacturaUpdateCommand : IRequest<FacturaResponse>
     {
         public int Id { get; set; }
         public string Pais { get; set; }
