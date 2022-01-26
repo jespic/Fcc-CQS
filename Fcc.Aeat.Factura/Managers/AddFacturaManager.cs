@@ -6,43 +6,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace Fcc.Aeat.Factura.Managers
 {
     public class AddFacturaManager: IAddFacturaManager
     {
         private readonly IFacturaRepository _facturaRepository;
+        private readonly IMapper _mapper;
 
-        public AddFacturaManager(IFacturaRepository facturaRepository)
+        public AddFacturaManager(IFacturaRepository facturaRepository, IMapper mapper)
         {
             _facturaRepository = facturaRepository;
+            _mapper = mapper;
         }
 
         //Validations should be synchronous
-        public Task<FacturaResponse> AddFactura(FacturaRequest facturaRequest)
+        public async Task<FacturaResponse> AddFactura(FacturaRequest facturaRequest)
         {
             if (facturaRequest == null)
             {
                 throw new ArgumentNullException(nameof(facturaRequest));
             }
 
-            var facturaModel = _facturaRepository.Add(facturaRequest);
-            return MapToFacturaResponse(facturaModel);
-        }
-
-        private Task<FacturaResponse> MapToFacturaResponse(FacturaModel facturaModel)
-        {
-            FacturaResponse facturaResponse = new FacturaResponse
-            {
-                Id = facturaModel.Id,
-                Pais = facturaModel.Pais,
-                Nif = facturaModel.Nif,
-                Importe = facturaModel.Importe,
-                Base = facturaModel.Base,
-                Iva = facturaModel.Iva,
-                Fecha = facturaModel.Fecha
-            };
-            return Task.FromResult(facturaResponse);
+            var facturaModel = await _facturaRepository.Add(facturaRequest);
+            return _mapper.Map<FacturaResponse>(facturaModel);
         }
     }
 }

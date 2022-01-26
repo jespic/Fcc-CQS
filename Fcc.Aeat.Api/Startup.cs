@@ -37,11 +37,13 @@ namespace Fcc.Aeat.Api
         public void ConfigureServices(IServiceCollection services)
         {
             //Services for CQS
+            ConfigureAutoMapper(services);
             ConfigureManagers(services);
             ConfigureHandlers(services);
             ConfigureServiceQueries(services);
             ConfigureDapperConnectionStrings(services);
             ConfigureServiceRepositories(services);
+
 
             services.AddControllers().AddFluentValidation(s =>
             {
@@ -74,6 +76,11 @@ namespace Fcc.Aeat.Api
             {
                 endpoints.MapControllers();
             });
+        }
+
+        public void ConfigureAutoMapper(IServiceCollection services)
+        {
+            services.AddAutoMapper(typeof(Startup));
         }
 
         public void ConfigureServiceQueries(IServiceCollection services)

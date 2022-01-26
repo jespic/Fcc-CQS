@@ -1,4 +1,6 @@
-﻿using Fcc.Aeat.Api.Models;
+﻿using AutoMapper;
+using Fcc.Aeat.Api.Models;
+using Fcc.Aeat.Factura.Contracts.Models;
 using Fcc.Aeat.Factura.Queries.Contracts;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +16,13 @@ namespace Fcc.Aeat.Api.Controllers
     {
         private readonly IMediator _mediator; //para las transacciones. Funciona con eventos.
         private readonly IFacturaQueries _facturaQueries; //para las queries. Sin eventos en esta implementación
+        private readonly IMapper _mapper;
 
-        public FacturaController(IFacturaQueries facturaQueries, IMediator mediator)
+        public FacturaController(IFacturaQueries facturaQueries, IMediator mediator, IMapper mapper)
         {
             _facturaQueries = facturaQueries;
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         // GET: api/<FacturaController>
@@ -28,7 +32,7 @@ namespace Fcc.Aeat.Api.Controllers
             try
             {
                 var facturas = await _facturaQueries.GetAll(nif);
-                    return Ok(facturas);
+                    return Ok(_mapper.Map<FacturaResponse>(facturas));
             }
             catch(System.Exception ex)
             {
@@ -46,8 +50,9 @@ namespace Fcc.Aeat.Api.Controllers
         public async Task<IActionResult> Post([FromBody] FacturaRequestDto facturaRequestDto)
         {
             var facturaAddCommand = FacturaRequestDto.MapToFacturaAddCommand(facturaRequestDto);
-            await _mediator.Send(facturaAddCommand);
-            return Ok();
+            var facturaResponse = await _mediator.Send(facturaAddCommand);
+
+            return Ok(_mapper.Map<FacturaResponseDto>(facturaResponse));
         }
 
         // PUT api/<FacturaController>/5
