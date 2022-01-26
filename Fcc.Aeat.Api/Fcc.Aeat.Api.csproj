@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>2c2154db-544d-4e7f-9191-ade477a9f4ab</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fcc.Aeat.Factura.Contracts\Fcc.Aeat.Factura.Contracts.csproj" />
+    <ProjectReference Include="..\Fcc.Aeat.Factura.Queries\Fcc.Aeat.Factura.Queries.csproj" />
+    <ProjectReference Include="..\Fcc.Aeat.Factura\Fcc.Aeat.Factura.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Startup.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Startup.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
